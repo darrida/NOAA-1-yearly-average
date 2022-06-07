@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "src"
+version = "2022.06.06"
+description = ""
+authors = ["darrida <darrida.py@gmail.com>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+prefect = "^2.0b5"
+boto3 = "^1.24.3"
+pandas = "^1.4.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
