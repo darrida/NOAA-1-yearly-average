@@ -17,7 +17,6 @@ def calc_yearly_avg(bucket_name, region_name, files_l: list, calc_all: bool=Fals
     logger = get_run_logger()
     s3_client = initialize_s3_client(region_name)
 
-    print(files_l)
     for f in files_l:
         logger.info(f'BEGIN calculating averages for {f}')
         obj = s3_client.get_object(Bucket=bucket_name, Key=f)
