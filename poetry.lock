@@ -2,7 +2,7 @@
 name = "aiofiles"
 version = "0.8.0"
 description = "File support for asyncio."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6,<4.0"
 
@@ -10,7 +10,7 @@ python-versions = ">=3.6,<4.0"
 name = "aiosqlite"
 version = "0.17.0"
 description = "asyncio bridge to the standard sqlite3 module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -21,7 +21,7 @@ typing_extensions = ">=3.7.2"
 name = "alembic"
 version = "1.8.0"
 description = "A database migration tool for SQLAlchemy."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -36,7 +36,7 @@ tz = ["python-dateutil"]
 name = "anyio"
 version = "3.6.1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6.2"
 
@@ -53,7 +53,7 @@ trio = ["trio (>=0.16)"]
 name = "asgi-lifespan"
 version = "1.0.1"
 description = "Programmatic startup/shutdown of ASGI apps."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -64,7 +64,7 @@ sniffio = "*"
 name = "asgiref"
 version = "3.5.2"
 description = "ASGI specs, helper code, and adapters"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -75,7 +75,7 @@ tests = ["pytest", "pytest-asyncio", "mypy (>=0.800)"]
 name = "asyncpg"
 version = "0.25.0"
 description = "An asyncio PostgreSQL driver"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6.0"
 
@@ -88,7 +88,7 @@ test = ["pycodestyle (>=2.7.0,<2.8.0)", "flake8 (>=3.9.2,<3.10.0)", "uvloop (>=0
 name = "azure-core"
 version = "1.24.1"
 description = "Microsoft Azure Core Library for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -101,7 +101,7 @@ typing-extensions = ">=4.0.1"
 name = "azure-storage-blob"
 version = "12.12.0"
 description = "Microsoft Azure Blob Storage Client Library for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -114,7 +114,7 @@ msrest = ">=0.6.21"
 name = "boto3"
 version = "1.24.3"
 description = "The AWS SDK for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">= 3.7"
 
@@ -130,7 +130,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 name = "botocore"
 version = "1.27.3"
 description = "Low-level, data-driven core of boto 3."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">= 3.7"
 
@@ -146,7 +146,7 @@ crt = ["awscrt (==0.13.8)"]
 name = "cachetools"
 version = "5.2.0"
 description = "Extensible memoizing collections and decorators"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "~=3.7"
 
@@ -154,7 +154,7 @@ python-versions = "~=3.7"
 name = "certifi"
 version = "2022.5.18.1"
 description = "Python package for providing Mozilla's CA Bundle."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -162,7 +162,7 @@ python-versions = ">=3.6"
 name = "cffi"
 version = "1.15.0"
 description = "Foreign Function Interface for Python calling C code."
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -173,7 +173,7 @@ pycparser = "*"
 name = "charset-normalizer"
 version = "2.0.12"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5.0"
 
@@ -184,7 +184,7 @@ unicode_backport = ["unicodedata2"]
 name = "click"
 version = "8.1.3"
 description = "Composable command line interface toolkit"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -195,7 +195,7 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 name = "cloudpickle"
 version = "2.1.0"
 description = "Extended pickling support for Python objects"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -203,7 +203,7 @@ python-versions = ">=3.6"
 name = "colorama"
 version = "0.4.4"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -211,7 +211,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 name = "commonmark"
 version = "0.9.1"
 description = "Python parser for the CommonMark Markdown spec"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -222,7 +222,7 @@ test = ["flake8 (==3.7.8)", "hypothesis (==3.55.3)"]
 name = "coolname"
 version = "1.1.0"
 description = "Random name and slug generator"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -230,7 +230,7 @@ python-versions = "*"
 name = "croniter"
 version = "1.3.5"
 description = "croniter provides iteration for datetime object with cron like format"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -241,7 +241,7 @@ python-dateutil = "*"
 name = "cryptography"
 version = "37.0.2"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -260,7 +260,7 @@ test = ["pytest (>=6.2.0)", "pytest-benchmark", "pytest-cov", "pytest-subtests",
 name = "dask"
 version = "2022.5.2"
 description = "Parallel PyData with Task Scheduling"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.8"
 
@@ -284,7 +284,7 @@ test = ["pytest", "pytest-rerunfailures", "pytest-xdist", "pre-commit"]
 name = "distributed"
 version = "2022.5.2"
 description = "Distributed scheduler for Dask"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.8"
 
@@ -307,26 +307,27 @@ zict = ">=0.1.3"
 
 [[package]]
 name = "docker"
-version = "5.0.3"
+version = "4.2.2"
 description = "A Python library for the Docker Engine API."
-category = "dev"
+category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
-pywin32 = {version = "227", markers = "sys_platform == \"win32\""}
+pypiwin32 = {version = "223", markers = "sys_platform == \"win32\" and python_version >= \"3.6\""}
 requests = ">=2.14.2,<2.18.0 || >2.18.0"
+six = ">=1.4.0"
 websocket-client = ">=0.32.0"
 
 [package.extras]
 ssh = ["paramiko (>=2.4.2)"]
-tls = ["pyOpenSSL (>=17.5.0)", "cryptography (>=3.4.7)", "idna (>=2.0.0)"]
+tls = ["pyOpenSSL (>=17.5.0)", "cryptography (>=1.3.4)", "idna (>=2.0.0)"]
 
 [[package]]
 name = "fastapi"
 version = "0.78.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6.1"
 
@@ -344,7 +345,7 @@ test = ["pytest (>=6.2.4,<7.0.0)", "pytest-cov (>=2.12.0,<4.0.0)", "mypy (==0.91
 name = "fsspec"
 version = "2022.5.0"
 description = "File-system specification"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -375,7 +376,7 @@ tqdm = ["tqdm"]
 name = "google-api-core"
 version = "2.8.1"
 description = "Google API client core library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -394,7 +395,7 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0dev)"]
 name = "google-auth"
 version = "2.6.6"
 description = "Google Authentication Library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
 
@@ -413,7 +414,7 @@ reauth = ["pyu2f (>=0.1.5)"]
 name = "google-cloud-core"
 version = "2.3.0"
 description = "Google Cloud API client core library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -428,7 +429,7 @@ grpc = ["grpcio (>=1.8.2,<2.0dev)"]
 name = "google-cloud-storage"
 version = "2.3.0"
 description = "Google Cloud Storage API client library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -444,7 +445,7 @@ requests = ">=2.18.0,<3.0.0dev"
 name = "google-crc32c"
 version = "1.3.0"
 description = "A python wrapper of the C library 'Google CRC32C'"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -455,7 +456,7 @@ testing = ["pytest"]
 name = "google-resumable-media"
 version = "2.3.3"
 description = "Utilities for Google Media Downloads and Resumable Uploads"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">= 3.6"
 
@@ -470,7 +471,7 @@ requests = ["requests (>=2.18.0,<3.0.0dev)"]
 name = "googleapis-common-protos"
 version = "1.56.2"
 description = "Common protobufs used in Google APIs"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -484,7 +485,7 @@ grpc = ["grpcio (>=1.0.0,<2.0.0dev)"]
 name = "greenlet"
 version = "1.1.2"
 description = "Lightweight in-process concurrent programming"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
@@ -495,7 +496,7 @@ docs = ["sphinx"]
 name = "h11"
 version = "0.12.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -503,7 +504,7 @@ python-versions = ">=3.6"
 name = "heapdict"
 version = "1.0.1"
 description = "a heap with decrease-key and increase-key operations"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -511,7 +512,7 @@ python-versions = "*"
 name = "httpcore"
 version = "0.15.0"
 description = "A minimal low-level HTTP client."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -529,7 +530,7 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 name = "httpx"
 version = "0.23.0"
 description = "The next generation HTTP client."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -549,7 +550,7 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 name = "idna"
 version = "3.3"
 description = "Internationalized Domain Names in Applications (IDNA)"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -557,7 +558,7 @@ python-versions = ">=3.5"
 name = "isodate"
 version = "0.6.1"
 description = "An ISO 8601 date/time/duration parser and formatter"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -568,7 +569,7 @@ six = "*"
 name = "jinja2"
 version = "3.1.2"
 description = "A very fast and expressive template engine."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -582,7 +583,7 @@ i18n = ["Babel (>=2.7)"]
 name = "jmespath"
 version = "1.0.0"
 description = "JSON Matching Expressions"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -590,7 +591,7 @@ python-versions = ">=3.7"
 name = "kubernetes"
 version = "23.6.0"
 description = "Kubernetes python client"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -601,7 +602,6 @@ python-dateutil = ">=2.5.3"
 pyyaml = ">=5.4.1"
 requests = "*"
 requests-oauthlib = "*"
-setuptools = ">=21.0.0"
 six = ">=1.9.0"
 urllib3 = ">=1.24.2"
 websocket-client = ">=0.32.0,<0.40.0 || >0.40.0,<0.41.0 || >=0.43.0"
@@ -613,7 +613,7 @@ adal = ["adal (>=1.0.2)"]
 name = "locket"
 version = "1.0.0"
 description = "File-based locks for Python on Linux and Windows"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -621,7 +621,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 name = "mako"
 version = "1.2.0"
 description = "A super-fast templating language that borrows the best ideas from the existing templating languages."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -637,7 +637,7 @@ testing = ["pytest"]
 name = "markupsafe"
 version = "2.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -645,7 +645,7 @@ python-versions = ">=3.7"
 name = "msgpack"
 version = "1.0.4"
 description = "MessagePack serializer"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -653,7 +653,7 @@ python-versions = "*"
 name = "msrest"
 version = "0.6.21"
 description = "AutoRest swagger generator Python client runtime."
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -670,7 +670,7 @@ async = ["aiohttp (>=3.0)", "aiodns"]
 name = "numpy"
 version = "1.22.4"
 description = "NumPy is the fundamental package for array computing with Python."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.8"
 
@@ -678,7 +678,7 @@ python-versions = ">=3.8"
 name = "oauthlib"
 version = "3.2.0"
 description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -691,7 +691,7 @@ signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
 name = "packaging"
 version = "21.3"
 description = "Core utilities for Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -702,7 +702,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 name = "pandas"
 version = "1.4.2"
 description = "Powerful data structures for data analysis, time series, and statistics"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.8"
 
@@ -718,7 +718,7 @@ test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
 name = "partd"
 version = "1.2.0"
 description = "Appendable key-value storage"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -733,7 +733,7 @@ complete = ["numpy (>=1.9.0)", "pandas (>=0.19.0)", "pyzmq", "blosc"]
 name = "pendulum"
 version = "2.1.2"
 description = "Python datetimes made easy"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -745,7 +745,7 @@ pytzdata = ">=2020.1"
 name = "prefect"
 version = "2.0b5"
 description = "Workflow orchestration and management."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -790,7 +790,7 @@ dev = ["flake8", "flaky", "ipython", "jinja2", "mkdocs", "mkdocs-gen-files", "mk
 name = "protobuf"
 version = "3.20.1"
 description = "Protocol Buffers"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -798,7 +798,7 @@ python-versions = ">=3.7"
 name = "psutil"
 version = "5.9.1"
 description = "Cross-platform lib for process and system monitoring in Python."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -809,7 +809,7 @@ test = ["ipaddress", "mock", "enum34", "pywin32", "wmi"]
 name = "pyasn1"
 version = "0.4.8"
 description = "ASN.1 types and codecs"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -817,7 +817,7 @@ python-versions = "*"
 name = "pyasn1-modules"
 version = "0.2.8"
 description = "A collection of ASN.1-based protocols modules."
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -828,7 +828,7 @@ pyasn1 = ">=0.4.6,<0.5.0"
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -836,7 +836,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 name = "pydantic"
 version = "1.9.1"
 description = "Data validation and settings management using python type hints"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6.1"
 
@@ -851,7 +851,7 @@ email = ["email-validator (>=1.0.3)"]
 name = "pygments"
 version = "2.12.0"
 description = "Pygments is a syntax highlighting package written in Python."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -859,7 +859,7 @@ python-versions = ">=3.6"
 name = "pyparsing"
 version = "3.0.9"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6.8"
 
@@ -867,10 +867,21 @@ python-versions = ">=3.6.8"
 diagrams = ["railroad-diagrams", "jinja2"]
 
 [[package]]
+name = "pypiwin32"
+version = "223"
+description = ""
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pywin32 = ">=223"
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 
@@ -881,7 +892,7 @@ six = ">=1.5"
 name = "python-slugify"
 version = "6.1.2"
 description = "A Python slugify application that also handles Unicode"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
@@ -895,7 +906,7 @@ unidecode = ["Unidecode (>=1.1.1)"]
 name = "pytz"
 version = "2022.1"
 description = "World timezone definitions, modern and historical"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -903,15 +914,15 @@ python-versions = "*"
 name = "pytzdata"
 version = "2020.1"
 description = "The Olson timezone database for Python."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pywin32"
-version = "227"
+version = "301"
 description = "Python for Window Extensions"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -919,7 +930,7 @@ python-versions = "*"
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -927,7 +938,7 @@ python-versions = ">=3.6"
 name = "readchar"
 version = "3.0.5"
 description = "Utilities to read single characters and key-strokes"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -935,7 +946,7 @@ python-versions = "*"
 name = "requests"
 version = "2.27.1"
 description = "Python HTTP for Humans."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
@@ -953,7 +964,7 @@ use_chardet_on_py3 = ["chardet (>=3.0.2,<5)"]
 name = "requests-oauthlib"
 version = "1.3.1"
 description = "OAuthlib authentication support for Requests."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
@@ -968,7 +979,7 @@ rsa = ["oauthlib[signedtoken] (>=3.0.0)"]
 name = "rfc3986"
 version = "1.5.0"
 description = "Validating URI References per RFC 3986"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -982,7 +993,7 @@ idna2008 = ["idna"]
 name = "rich"
 version = "12.4.4"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6.3,<4.0.0"
 
@@ -997,7 +1008,7 @@ jupyter = ["ipywidgets (>=7.5.1,<8.0.0)"]
 name = "rsa"
 version = "4.8"
 description = "Pure-Python RSA implementation"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6,<4"
 
@@ -1008,7 +1019,7 @@ pyasn1 = ">=0.1.3"
 name = "s3transfer"
 version = "0.6.0"
 description = "An Amazon S3 Transfer Manager"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">= 3.7"
 
@@ -1019,23 +1030,10 @@ botocore = ">=1.12.36,<2.0a.0"
 crt = ["botocore[crt] (>=1.20.29,<2.0a.0)"]
 
 [[package]]
-name = "setuptools"
-version = "62.3.2"
-description = "Easily download, build, install, upgrade, and uninstall Python packages"
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.extras]
-docs = ["sphinx", "jaraco.packaging (>=9)", "rst.linker (>=1.9)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-reredirects", "sphinxcontrib-towncrier", "furo"]
-testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-enabler (>=1.0.1)", "pytest-perf", "mock", "flake8-2020", "virtualenv (>=13.0.0)", "wheel", "pip (>=19.1)", "jaraco.envs (>=2.2)", "pytest-xdist", "jaraco.path (>=3.2.0)", "build", "filelock (>=3.4.0)", "pip-run (>=8.8)", "ini2toml[lite] (>=0.9)", "tomli-w (>=1.0.0)", "pytest-black (>=0.3.7)", "pytest-cov", "pytest-mypy (>=0.9.1)"]
-testing-integration = ["pytest", "pytest-xdist", "pytest-enabler", "virtualenv (>=13.0.0)", "tomli", "wheel", "jaraco.path (>=3.2.0)", "jaraco.envs (>=2.2)", "build", "filelock (>=3.4.0)"]
-
-[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
@@ -1043,7 +1041,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 name = "sniffio"
 version = "1.2.0"
 description = "Sniff out which async library your code is running under"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -1051,7 +1049,7 @@ python-versions = ">=3.5"
 name = "sortedcontainers"
 version = "2.4.0"
 description = "Sorted Containers -- Sorted List, Sorted Dict, Sorted Set"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -1059,7 +1057,7 @@ python-versions = "*"
 name = "sqlalchemy"
 version = "1.4.37"
 description = "Database Abstraction Library"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
 
@@ -1091,7 +1089,7 @@ sqlcipher = ["sqlcipher3-binary"]
 name = "starlette"
 version = "0.19.1"
 description = "The little ASGI library that shines."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -1105,7 +1103,7 @@ full = ["itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests"]
 name = "tblib"
 version = "1.7.0"
 description = "Traceback serialization library."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -1113,7 +1111,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 name = "text-unidecode"
 version = "1.3"
 description = "The most basic Text::Unidecode port"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -1121,7 +1119,7 @@ python-versions = "*"
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
@@ -1129,7 +1127,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 name = "toolz"
 version = "0.11.2"
 description = "List processing tools and functional utilities"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -1137,7 +1135,7 @@ python-versions = ">=3.5"
 name = "tornado"
 version = "6.1"
 description = "Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">= 3.5"
 
@@ -1145,7 +1143,7 @@ python-versions = ">= 3.5"
 name = "typer"
 version = "0.4.1"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -1162,7 +1160,7 @@ test = ["shellingham (>=1.3.0,<2.0.0)", "pytest (>=4.4.0,<5.4.0)", "pytest-cov (
 name = "typing-extensions"
 version = "4.2.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1170,7 +1168,7 @@ python-versions = ">=3.7"
 name = "urllib3"
 version = "1.26.9"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
 
@@ -1183,7 +1181,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 name = "uvicorn"
 version = "0.17.6"
 description = "The lightning-fast ASGI server."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1199,7 +1197,7 @@ standard = ["websockets (>=10.0)", "httptools (>=0.4.0)", "watchgod (>=0.6)", "p
 name = "websocket-client"
 version = "1.3.2"
 description = "WebSocket client for Python with low level API options"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1212,7 +1210,7 @@ test = ["websockets"]
 name = "zict"
 version = "2.2.0"
 description = "Mutable mapping tools"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1222,7 +1220,7 @@ heapdict = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "a4e7b01762e2bcf540bc513d66b1303d8b58966c59152852365a31accdf2e1c6"
+content-hash = "e02d6f3d88a6ed682a4d72fda27335619896921202426796fa90c1b43b0538bf"
 
 [metadata.files]
 aiofiles = [
@@ -1414,8 +1412,8 @@ distributed = [
     {file = "distributed-2022.5.2.tar.gz", hash = "sha256:044aac51fa64fd9e16b1a2c4315220d281f0e5cc1b05f4d3d37852426f1e7cb6"},
 ]
 docker = [
-    {file = "docker-5.0.3-py2.py3-none-any.whl", hash = "sha256:7a79bb439e3df59d0a72621775d600bc8bc8b422d285824cb37103eab91d1ce0"},
-    {file = "docker-5.0.3.tar.gz", hash = "sha256:d916a26b62970e7c2f554110ed6af04c7ccff8e9f81ad17d0d40c75637e227fb"},
+    {file = "docker-4.2.2-py2.py3-none-any.whl", hash = "sha256:03a46400c4080cb6f7aa997f881ddd84fef855499ece219d75fbdb53289c17ab"},
+    {file = "docker-4.2.2.tar.gz", hash = "sha256:26eebadce7e298f55b76a88c4f8802476c5eaddbdbe38dbc6cce8781c47c9b54"},
 ]
 fastapi = [
     {file = "fastapi-0.78.0-py3-none-any.whl", hash = "sha256:15fcabd5c78c266fa7ae7d8de9b384bfc2375ee0503463a6febbe3bab69d6f65"},
@@ -1920,6 +1918,10 @@ pyparsing = [
     {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
     {file = "pyparsing-3.0.9.tar.gz", hash = "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb"},
 ]
+pypiwin32 = [
+    {file = "pypiwin32-223-py3-none-any.whl", hash = "sha256:67adf399debc1d5d14dffc1ab5acacb800da569754fafdc576b2a039485aa775"},
+    {file = "pypiwin32-223.tar.gz", hash = "sha256:71be40c1fbd28594214ecaecb58e7aa8b708eabfa0125c8a109ebd51edbd776a"},
+]
 python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
@@ -1937,18 +1939,16 @@ pytzdata = [
     {file = "pytzdata-2020.1.tar.gz", hash = "sha256:3efa13b335a00a8de1d345ae41ec78dd11c9f8807f522d39850f2dd828681540"},
 ]
 pywin32 = [
-    {file = "pywin32-227-cp27-cp27m-win32.whl", hash = "sha256:371fcc39416d736401f0274dd64c2302728c9e034808e37381b5e1b22be4a6b0"},
-    {file = "pywin32-227-cp27-cp27m-win_amd64.whl", hash = "sha256:4cdad3e84191194ea6d0dd1b1b9bdda574ff563177d2adf2b4efec2a244fa116"},
-    {file = "pywin32-227-cp35-cp35m-win32.whl", hash = "sha256:f4c5be1a293bae0076d93c88f37ee8da68136744588bc5e2be2f299a34ceb7aa"},
-    {file = "pywin32-227-cp35-cp35m-win_amd64.whl", hash = "sha256:a929a4af626e530383a579431b70e512e736e9588106715215bf685a3ea508d4"},
-    {file = "pywin32-227-cp36-cp36m-win32.whl", hash = "sha256:300a2db938e98c3e7e2093e4491439e62287d0d493fe07cce110db070b54c0be"},
-    {file = "pywin32-227-cp36-cp36m-win_amd64.whl", hash = "sha256:9b31e009564fb95db160f154e2aa195ed66bcc4c058ed72850d047141b36f3a2"},
-    {file = "pywin32-227-cp37-cp37m-win32.whl", hash = "sha256:47a3c7551376a865dd8d095a98deba954a98f326c6fe3c72d8726ca6e6b15507"},
-    {file = "pywin32-227-cp37-cp37m-win_amd64.whl", hash = "sha256:31f88a89139cb2adc40f8f0e65ee56a8c585f629974f9e07622ba80199057511"},
-    {file = "pywin32-227-cp38-cp38-win32.whl", hash = "sha256:7f18199fbf29ca99dff10e1f09451582ae9e372a892ff03a28528a24d55875bc"},
-    {file = "pywin32-227-cp38-cp38-win_amd64.whl", hash = "sha256:7c1ae32c489dc012930787f06244426f8356e129184a02c25aef163917ce158e"},
-    {file = "pywin32-227-cp39-cp39-win32.whl", hash = "sha256:c054c52ba46e7eb6b7d7dfae4dbd987a1bb48ee86debe3f245a2884ece46e295"},
-    {file = "pywin32-227-cp39-cp39-win_amd64.whl", hash = "sha256:f27cec5e7f588c3d1051651830ecc00294f90728d19c3bf6916e6dba93ea357c"},
+    {file = "pywin32-301-cp35-cp35m-win32.whl", hash = "sha256:93367c96e3a76dfe5003d8291ae16454ca7d84bb24d721e0b74a07610b7be4a7"},
+    {file = "pywin32-301-cp35-cp35m-win_amd64.whl", hash = "sha256:9635df6998a70282bd36e7ac2a5cef9ead1627b0a63b17c731312c7a0daebb72"},
+    {file = "pywin32-301-cp36-cp36m-win32.whl", hash = "sha256:c866f04a182a8cb9b7855de065113bbd2e40524f570db73ef1ee99ff0a5cc2f0"},
+    {file = "pywin32-301-cp36-cp36m-win_amd64.whl", hash = "sha256:dafa18e95bf2a92f298fe9c582b0e205aca45c55f989937c52c454ce65b93c78"},
+    {file = "pywin32-301-cp37-cp37m-win32.whl", hash = "sha256:98f62a3f60aa64894a290fb7494bfa0bfa0a199e9e052e1ac293b2ad3cd2818b"},
+    {file = "pywin32-301-cp37-cp37m-win_amd64.whl", hash = "sha256:fb3b4933e0382ba49305cc6cd3fb18525df7fd96aa434de19ce0878133bf8e4a"},
+    {file = "pywin32-301-cp38-cp38-win32.whl", hash = "sha256:88981dd3cfb07432625b180f49bf4e179fb8cbb5704cd512e38dd63636af7a17"},
+    {file = "pywin32-301-cp38-cp38-win_amd64.whl", hash = "sha256:8c9d33968aa7fcddf44e47750e18f3d034c3e443a707688a008a2e52bbef7e96"},
+    {file = "pywin32-301-cp39-cp39-win32.whl", hash = "sha256:595d397df65f1b2e0beaca63a883ae6d8b6df1cdea85c16ae85f6d2e648133fe"},
+    {file = "pywin32-301-cp39-cp39-win_amd64.whl", hash = "sha256:87604a4087434cd814ad8973bd47d6524bd1fa9e971ce428e76b62a5e0860fdf"},
 ]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
@@ -2012,10 +2012,6 @@ rsa = [
 s3transfer = [
     {file = "s3transfer-0.6.0-py3-none-any.whl", hash = "sha256:06176b74f3a15f61f1b4f25a1fc29a4429040b7647133a463da8fa5bd28d5ecd"},
     {file = "s3transfer-0.6.0.tar.gz", hash = "sha256:2ed07d3866f523cc561bf4a00fc5535827981b117dd7876f036b0c1aca42c947"},
-]
-setuptools = [
-    {file = "setuptools-62.3.2-py3-none-any.whl", hash = "sha256:68e45d17c9281ba25dc0104eadd2647172b3472d9e01f911efa57965e8d51a36"},
-    {file = "setuptools-62.3.2.tar.gz", hash = "sha256:a43bdedf853c670e5fed28e5623403bad2f73cf02f9a2774e91def6bda8265a7"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
