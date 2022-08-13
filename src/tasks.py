@@ -24,7 +24,7 @@ def calc_yearly_avg(bucket_name, region_name, files_l: list, calc_all: bool=Fals
         # Read data and prep for calculations
         df = pd.read_csv(data)
         df = set_station_as_index(df)
-        df = remove_missing_spatial(df)
+        # df = remove_missing_spatial(df)
         # Calculate yearly averages
         avg_df = df.groupby('STATION')[['TEMP', 'DEWP', 'STP', 'MIN', 'MAX', 'PRCP']].mean()
         # Pull spatial data and rejoin with calculated averages
