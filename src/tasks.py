@@ -2,6 +2,8 @@ from io import StringIO
 from pathlib import Path
 from prefect import task, get_run_logger
 import pandas as pd
+from prefect_sqlalchemy import DatabaseCredentials, AsyncDriver
+from prefect_sqlalchemy.database import sqlalchemy_execute
 from src.support import initialize_s3_client, aws_all_data_files, set_station_as_index, remove_missing_spatial
 
 
@@ -40,3 +42,17 @@ def calc_yearly_avg(bucket_name, region_name, files_l: list, calc_all: bool=Fals
         filename = Path(f).name
         s3_client.put_object(Body=textStream.getvalue(), Bucket=bucket_name, Key=f"year_average/{filename[:4]}_averages.csv")
         logger.info(f'COMPLETED calculating averages for {f}; stored as "year_average/{filename[:4]}_averages.csv"')
+
+
+@task(retries=5, retry_delay_seconds=5)
+def database_insert(bucket_name, region_name, files_l: list):
+    sqlalchemy_credentials = DatabaseCredentials(
+        driver=AsyncDriver.POSTGRESQL_ASYNCPG,
+        username="prefect",
+        password="prefect_password",
+        database="postgres",
+    )
+    sqlalchemy_execute(
+        "abligatory insert statement",
+        sqlalchemy_credentials,
+    )
