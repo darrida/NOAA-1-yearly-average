@@ -128,27 +128,27 @@ tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>
 
 [[package]]
 name = "boto3"
-version = "1.24.51"
+version = "1.21.21"
 description = "The AWS SDK for Python"
-category = "dev"
+category = "main"
 optional = false
-python-versions = ">= 3.7"
+python-versions = ">= 3.6"
 
 [package.dependencies]
-botocore = ">=1.27.51,<1.28.0"
+botocore = ">=1.24.21,<1.25.0"
 jmespath = ">=0.7.1,<2.0.0"
-s3transfer = ">=0.6.0,<0.7.0"
+s3transfer = ">=0.5.0,<0.6.0"
 
 [package.extras]
 crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.27.51"
+version = "1.24.21"
 description = "Low-level, data-driven core of boto 3."
-category = "dev"
+category = "main"
 optional = false
-python-versions = ">= 3.7"
+python-versions = ">= 3.6"
 
 [package.dependencies]
 jmespath = ">=0.7.1,<2.0.0"
@@ -156,7 +156,7 @@ python-dateutil = ">=2.1,<3.0.0"
 urllib3 = ">=1.25.4,<1.27"
 
 [package.extras]
-crt = ["awscrt (==0.13.8)"]
+crt = ["awscrt (==0.13.5)"]
 
 [[package]]
 name = "cachetools"
@@ -446,7 +446,7 @@ python-versions = ">=3.5"
 name = "jmespath"
 version = "1.0.1"
 description = "JSON Matching Expressions"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -526,7 +526,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "numpy"
-version = "1.23.1"
+version = "1.23.2"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "dev"
 optional = false
@@ -640,10 +640,26 @@ uvicorn = ">=0.14.0"
 dev = ["setuptools (!=60.9.0)", "mock", "respx", "watchfiles", "virtualenv", "requests", "pyyaml", "pytkdocs (>=0.14.2)", "pytest-xdist", "pytest-timeout", "pytest-env", "pytest-cov", "pytest-asyncio (>=0.18.2)", "pytest", "pre-commit", "mypy", "moto", "mkdocstrings-python-legacy", "mkdocs-material", "mkdocs-gen-files", "mkdocs", "jinja2", "ipython", "flaky", "flake8", "autoflake8"]
 
 [[package]]
+name = "prefect-aws"
+version = "0.1.2"
+description = "Prefect collection of tasks and subflows to integrate with AWS"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+boto3 = "1.21.21"
+botocore = "1.24.21"
+prefect = ">=2.0"
+
+[package.extras]
+dev = ["mock", "aiobotocore (>=2.3.4)", "boto3-stubs (>=1.24.39)", "types-boto3 (>=1.0.2)", "coverage", "interrogate", "mkdocs-gen-files", "pytest-lazy-fixture", "pytest-asyncio", "moto (>=3.1.16)", "pre-commit", "isort", "mkdocstrings", "mkdocs-material", "mkdocs", "mypy", "flake8", "black", "pytest"]
+
+[[package]]
 name = "prefect-sqlalchemy"
 version = "0.1.2"
 description = "Prefect integrations for interacting with SQLAlchemy."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 
@@ -658,7 +674,7 @@ dev = ["mock", "aiosqlite", "asyncpg", "psycopg2", "coverage", "interrogate", "m
 name = "psycopg2-binary"
 version = "2.9.3"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 
@@ -727,7 +743,7 @@ diagrams = ["railroad-diagrams", "jinja2"]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 
@@ -782,7 +798,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "readchar"
-version = "4.0.0"
+version = "4.0.1"
 description = "Library to easily read single chars and key strokes"
 category = "dev"
 optional = false
@@ -867,11 +883,11 @@ pyasn1 = ">=0.1.3"
 
 [[package]]
 name = "s3transfer"
-version = "0.6.0"
+version = "0.5.2"
 description = "An Amazon S3 Transfer Manager"
-category = "dev"
+category = "main"
 optional = false
-python-versions = ">= 3.7"
+python-versions = ">= 3.6"
 
 [package.dependencies]
 botocore = ">=1.12.36,<2.0a.0"
@@ -881,7 +897,7 @@ crt = ["botocore[crt] (>=1.20.29,<2.0a.0)"]
 
 [[package]]
 name = "setuptools"
-version = "64.0.3"
+version = "65.0.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 category = "dev"
 optional = false
@@ -924,7 +940,7 @@ python-versions = ">=3.5"
 name = "sqlalchemy"
 version = "1.4.40"
 description = "Database Abstraction Library"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
 
@@ -1011,7 +1027,7 @@ python-versions = ">=3.7"
 name = "urllib3"
 version = "1.26.11"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, <4"
 
@@ -1074,7 +1090,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ff8212c348e0aa5d4a564adda737797ff0b479eac157164ef2724c851b973a0e"
+content-hash = "15dcc6a0a8be962a837d584c8d2b2b6bd6dc6653522a3f80e73056a4b318d6d6"
 
 [metadata.files]
 aiofiles = [
@@ -1307,6 +1323,7 @@ pendulum = [
     {file = "pendulum-2.1.2.tar.gz", hash = "sha256:b06a0ca1bfe41c990bbf0c029f0b6501a7f2ec4e38bfec730712015e8860f207"},
 ]
 prefect = []
+prefect-aws = []
 prefect-sqlalchemy = []
 psycopg2-binary = [
     {file = "psycopg2-binary-2.9.3.tar.gz", hash = "sha256:761df5313dc15da1502b21453642d7599d26be88bff659382f8f9747c7ebea4e"},
@@ -1484,8 +1501,8 @@ rfc3986 = [
 rich = []
 rsa = []
 s3transfer = [
-    {file = "s3transfer-0.6.0-py3-none-any.whl", hash = "sha256:06176b74f3a15f61f1b4f25a1fc29a4429040b7647133a463da8fa5bd28d5ecd"},
-    {file = "s3transfer-0.6.0.tar.gz", hash = "sha256:2ed07d3866f523cc561bf4a00fc5535827981b117dd7876f036b0c1aca42c947"},
+    {file = "s3transfer-0.5.2-py3-none-any.whl", hash = "sha256:7a6f4c4d1fdb9a2b640244008e142cbc2cd3ae34b386584ef044dd0f27101971"},
+    {file = "s3transfer-0.5.2.tar.gz", hash = "sha256:95c58c194ce657a5f4fb0b9e60a84968c808888aed628cd98ab8771fe1db98ed"},
 ]
 setuptools = []
 six = [
