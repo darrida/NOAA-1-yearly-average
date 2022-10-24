@@ -1,0 +1,1 @@
+select * from noaa_year_averages
