@@ -16,6 +16,11 @@ def insert_records(new_records: bytes, year: int):
     new_df = pd.read_csv(data)
     print(new_df)
     
+    # TODO: (1) Figure out how to transform new data to match existing data queried from db
+    # TODO: (2) See if I can setup a set difference
+    # TODO: (3) Insert/Update differences in database
+    # - See if it's possible to do "insert many" with prefect-sqlalchemy
+    
     # pprint(new_records)
     sql_query = """select * from climate.noaa_year_averages where year = :year"""
     with open("sql/insert.sql") as f:
