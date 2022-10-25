@@ -10,10 +10,10 @@ packages = [{include = "src"}]
 python = "^3.10"
 prefect = "^2.0.0"
 # boto3 = "^1.24.3"
-pandas = "^1.4.2"
+pandas = "^1.5.0"
 psycopg2-binary = "^2.9.3"
-prefect-sqlalchemy = "^0.1.2"
-prefect-aws = "^0.1.2"
+prefect-sqlalchemy = "^0.2.0"
+prefect-aws = "^0.1.6"
 
 
 [build-system]

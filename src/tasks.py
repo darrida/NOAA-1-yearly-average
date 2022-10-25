@@ -1,6 +1,7 @@
 from io import StringIO
 from pathlib import Path
 from pprint import pprint
+from typing import Tuple
 from prefect import task, get_run_logger
 import pandas as pd
 from support import set_station_as_index
@@ -28,6 +29,7 @@ def calc_yearly_avg(obj: bytes, filename) -> bytes:
     # Export dataframe to in-memory file stream
     textStream = StringIO()
     df.to_csv(textStream)
+    df.to_csv("temp_records.csv")
 
     filename = Path(filename).name
     logger.info(f"COMPLETED calculating averages for {filename}")
