@@ -1,10 +1,11 @@
+from pprint import pprint
+from datetime import datetime
 from prefect import flow, get_run_logger
 from prefect.task_runners import SequentialTaskRunner
 from prefect_aws import AwsCredentials
 from prefect_aws.s3 import s3_list_objects, s3_download, s3_upload
 from prefect_sqlalchemy import DatabaseCredentials
 from prefect_sqlalchemy.database import sqlalchemy_query
-from subflows import insert_records
 from tasks import calc_yearly_avg, insert_records1, prep_records
 
 
@@ -16,27 +17,59 @@ def main():
     aws_creds = AwsCredentials.load("aws-creds")
     db_creds = DatabaseCredentials.load("heroku-postgres")
 
+    # FIND DIFFERENCE BETWEEN S3 AND DB (if S3 date > db date, update year records)
     s3_objects = s3_list_objects(bucket=bucket, prefix="data", aws_credentials=aws_creds)
     files_l = [x["Key"] for x in s3_objects]
-    # identify if any years need to be updated
-    last_updated_s3_l = [x["Key"] for x in s3_objects if x.endswith('___complete')]
-    
-    # TODO: Finish this query
-    #       - goal is to pull years where the last updated date
-    #         is less than the date associated with the "___complete"
-    #         file. This will identify what needs to be inserted.
-    # TODO: Decide if there is a need to replace the current/old records
-    #       (if they exist to be replaced)
+    # pprint(files_l)
+
+    # pull completed files (includes NOAA csv date)
+    # - transform to match queried db format
+    last_updated_s3_l = [x["Key"] for x in s3_objects if x["Key"].endswith('___complete')]
+    last_updated_s3_l = [
+       (x.split("/")[1][:4], datetime.strptime(x.split("_")[2], '%Y%m%d').date()) 
+        for x in last_updated_s3_l
+    ]
+    # pprint(last_updated_s3_l)
+
+    # Query year update dates from db
+    # - transform into dictionary with year for keys (quick searching)
     last_updated_db_l = sqlalchemy_query(
         """
-        select * from climate.csv_checker
-        where year = :year
-        and <last_updated> = :<field with matching date to compare>
-        """
+        select year, date_update from climate.csv_checker
+        order by year
+        """,
+        sqlalchemy_credentials=db_creds,
     )
+    # pprint(last_updated_db_l)
+    last_updated_db_d = {}
+    for obj in last_updated_db_l:
+        year, date_ = obj[0], obj[1]
+        last_updated_db_d[year] = date_
+    
+    # Identify years for data upload/insert/update
+    update_l = []
+    for i in last_updated_s3_l:
+        year = i[0]
+        s3_date = i[1]
+        try:
+            db_date = last_updated_db_d[year]
+        except KeyError:
+            # If year not found in db, add year to update/insert list
+            update_l.append(year)
+            continue
+        if s3_date > db_date:
+            # If s3 date is more than db date, add year to update/insert list
+            update_l.append(year)
+    pprint(update_l)
+    # exit()
+    
     # get list of files with data to insert
-    csv_l = [x for x in files_l if x.endswith('_full.csv')]
+    csv_l = [x for x in files_l if x.endswith('_full.csv') and x.split("/")[1][:4] in update_l]
+    print(csv_l)
+    exit()
 
+    # TODO: Decide if there is a need to replace the current/old records
+    #       (if they exist to be replaced)
     for filename in csv_l[:1]:
         # if '1980' not in filename:
         #     continue

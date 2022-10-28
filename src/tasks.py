@@ -60,7 +60,7 @@ def calc_yearly_avg(obj: bytes, filename) -> bytes:
 
 
 @task()
-def prep_records(data, db_creds: DatabaseCredentials) -> List(list):
+def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
     logger = get_run_logger()
     
     conn_info = {
@@ -112,7 +112,7 @@ def prep_records(data, db_creds: DatabaseCredentials) -> List(list):
 
 
 @task()
-def insert_records1(data: List(list), year: str, db_creds: DatabaseCredentials):
+def insert_records1(data: List[list], year: str, db_creds: DatabaseCredentials):
     logger = get_run_logger()
     
     conn_info = {
