@@ -1,12 +1,13 @@
 from pprint import pprint
-from datetime import datetime
+from datetime import datetime, timedelta
+from prefect.tasks import task_input_hash
 from prefect import flow, get_run_logger
 from prefect.task_runners import SequentialTaskRunner
 from prefect_aws import AwsCredentials
 from prefect_aws.s3 import s3_list_objects, s3_download, s3_upload
 from prefect_sqlalchemy import DatabaseCredentials
 from prefect_sqlalchemy.database import sqlalchemy_query
-from tasks import calc_yearly_avg, insert_records1, prep_records
+from tasks import calc_yearly_avg, insert_records, prep_records
 
 
 @flow(name="NOAA-1-yearly-average", task_runner=SequentialTaskRunner())
@@ -66,11 +67,11 @@ def main():
     # get list of files with data to insert
     csv_l = [x for x in files_l if x.endswith('_full.csv') and x.split("/")[1][:4] in update_l]
     print(csv_l)
-    exit()
+    # exit()
 
     # TODO: Decide if there is a need to replace the current/old records
     #       (if they exist to be replaced)
-    for filename in csv_l[:1]:
+    for filename in csv_l:
         # if '1980' not in filename:
         #     continue
         print(filename)
@@ -79,11 +80,15 @@ def main():
         key = s3_upload(bucket=bucket, key=f"year_average/{filename.split('/')[1][:4]}_averages.csv", # example "filename": "data/YYYY_full.csv"
                         data=avg_obj, aws_credentials=aws_creds)
         logger.info(f"Stored as '{key}'")
+        # continue
         logger.info(f"Start Database Insert Process for {key}")
         # insert_records(dataframe, "1995")
-        insert_records(avg_obj, "1995")
-        prepped_l = prep_records(avg_obj)
-        inserted = insert_records1(prepped_l, "1995", db_creds)
+        # insert_records(avg_obj, "1995")
+        prepped_l = prep_records(avg_obj, db_creds)
+        pprint(prepped_l)
+        # return
+        year = filename.split("/")[:4]
+        inserted = insert_records(prepped_l, year, db_creds)
 
 
 if __name__ == "__main__":

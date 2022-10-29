@@ -2,9 +2,11 @@ from io import StringIO
 from pathlib import Path
 from pprint import pprint
 import time
+from datetime import timedelta
 from typing import List, Tuple
 from h11 import Data
 from prefect import task, get_run_logger
+from prefect.tasks import task_input_hash
 import pandas as pd
 from psycopg2.errors import UniqueViolation, InFailedSqlTransaction
 from psycopg2.errors import SyntaxError, InFailedSqlTransaction
@@ -14,7 +16,9 @@ from tqdm import tqdm
 from support import set_station_as_index, initialize_s3_client, df_if_two_one, database
 
 
-@task(retries=5, retry_delay_seconds=5)
+@task(retries=5, retry_delay_seconds=5,
+      cache_key_fn=task_input_hash, 
+      cache_expiration=timedelta(minutes=300))
 def calc_yearly_avg(obj: bytes, filename) -> bytes:
     logger = get_run_logger()
 
@@ -59,7 +63,8 @@ def calc_yearly_avg(obj: bytes, filename) -> bytes:
 #     )
 
 
-@task()
+@task(cache_key_fn=task_input_hash, 
+      cache_expiration=timedelta(minutes=300))
 def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
     logger = get_run_logger()
     
@@ -71,15 +76,18 @@ def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
         "port": db_creds.port,
     }
     
+    data = StringIO(str(data, 'utf-8'))
+    
     csv_df = pd.read_csv(data)
-    csv_df["SITE_NUMBER"] = csv_df["SITE_NUMBER"].str.strip("]")
-    csv_df["SITE_NUMBER"] = csv_df["SITE_NUMBER"].str.strip("[")
-    csv_df["LATITUDE"] = csv_df["LATITUDE"].str.strip("]")
-    csv_df["LATITUDE"] = csv_df["LATITUDE"].str.strip("[")
-    csv_df["LONGITUDE"] = csv_df["LONGITUDE"].str.strip("]")
-    csv_df["LONGITUDE"] = csv_df["LONGITUDE"].str.strip("[")
-    csv_df["ELEVATION"] = csv_df["ELEVATION"].str.strip("]")
-    csv_df["ELEVATION"] = csv_df["ELEVATION"].str.strip("[")
+    pprint(csv_df)
+    # csv_df["STATION"] = csv_df["STATION"].str.strip("]")
+    # csv_df["STATION"] = csv_df["STATION"].str.strip("[")
+    # csv_df["LATITUDE"] = csv_df["LATITUDE"].str.strip("]")
+    # csv_df["LATITUDE"] = csv_df["LATITUDE"].str.strip("[")
+    # csv_df["LONGITUDE"] = csv_df["LONGITUDE"].str.strip("]")
+    # csv_df["LONGITUDE"] = csv_df["LONGITUDE"].str.strip("[")
+    # csv_df["ELEVATION"] = csv_df["ELEVATION"].str.strip("]")
+    # csv_df["ELEVATION"] = csv_df["ELEVATION"].str.strip("[")
     
     prepped_l = []
     with database(**conn_info) as conn:
@@ -87,13 +95,14 @@ def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
             vals = [csv_df.at[i, col] for col in list(csv_df.columns)]
             station = vals[0]
             # df_if_two_one cleans a few issues left over from the data cleaning and calc steps
-            station = df_if_two_one(station)
+            # station = df_if_two_one(station)
             latitude = vals[1]
-            latitude = df_if_two_one(latitude)
+            # latitude = df_if_two_one(latitude)
             longitude = vals[2]
-            longitude = df_if_two_one(longitude)
-            if latitude not in ("nan", "") and longitude not in ("nan", ""):
+            # longitude = df_if_two_one(longitude)
+            if latitude not in ("nan", "", "missing") and longitude not in ("nan", "", "missing"):
                 try:
+                    # print(f"LATITUDE: {latitude} | LONGITUDE: {longitude}")
                     cursor = conn.cursor()
                     # val = cursor.callproc('ST_GeomFromText', ((f'POINT({longitude} {latitude})'), 4326))
                     cursor.callproc("ST_GeomFromText", ((f"POINT({longitude} {latitude})"), 4326))
@@ -112,7 +121,7 @@ def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
 
 
 @task()
-def insert_records1(data: List[list], year: str, db_creds: DatabaseCredentials):
+def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
     logger = get_run_logger()
     
     conn_info = {
