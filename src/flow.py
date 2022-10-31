@@ -1,13 +1,12 @@
 from pprint import pprint
-from datetime import datetime, timedelta
-from prefect.tasks import task_input_hash
-from prefect import flow, get_run_logger
+from datetime import datetime
+from prefect import flow, get_run_logger, unmapped
 from prefect.task_runners import SequentialTaskRunner
 from prefect_aws import AwsCredentials
 from prefect_aws.s3 import s3_list_objects, s3_download, s3_upload
 from prefect_sqlalchemy import DatabaseCredentials
 from prefect_sqlalchemy.database import sqlalchemy_query
-from tasks import calc_yearly_avg, insert_records, prep_records
+from tasks import calc_yearly_avg, insert_records, prep_records, update_csv_checker
 
 
 @flow(name="NOAA-1-yearly-average", task_runner=SequentialTaskRunner())
@@ -21,7 +20,6 @@ def main():
     # FIND DIFFERENCE BETWEEN S3 AND DB (if S3 date > db date, update year records)
     s3_objects = s3_list_objects(bucket=bucket, prefix="data", aws_credentials=aws_creds)
     files_l = [x["Key"] for x in s3_objects]
-    # pprint(files_l)
 
     # pull completed files (includes NOAA csv date)
     # - transform to match queried db format
@@ -30,7 +28,6 @@ def main():
        (x.split("/")[1][:4], datetime.strptime(x.split("_")[2], '%Y%m%d').date()) 
         for x in last_updated_s3_l
     ]
-    # pprint(last_updated_s3_l)
 
     # Query year update dates from db
     # - transform into dictionary with year for keys (quick searching)
@@ -41,7 +38,6 @@ def main():
         """,
         sqlalchemy_credentials=db_creds,
     )
-    # pprint(last_updated_db_l)
     last_updated_db_d = {}
     for obj in last_updated_db_l:
         year, date_ = obj[0], obj[1]
@@ -62,12 +58,10 @@ def main():
             # If s3 date is more than db date, add year to update/insert list
             update_l.append(year)
     pprint(update_l)
-    # exit()
     
     # get list of files with data to insert
     csv_l = [x for x in files_l if x.endswith('_full.csv') and x.split("/")[1][:4] in update_l]
     print(csv_l)
-    # exit()
 
     # TODO: Decide if there is a need to replace the current/old records
     #       (if they exist to be replaced)
@@ -82,13 +76,29 @@ def main():
         logger.info(f"Stored as '{key}'")
         # continue
         logger.info(f"Start Database Insert Process for {key}")
-        # insert_records(dataframe, "1995")
-        # insert_records(avg_obj, "1995")
         prepped_l = prep_records(avg_obj, db_creds)
-        pprint(prepped_l)
-        # return
         year = filename.split("/")[:4]
-        inserted = insert_records(prepped_l, year, db_creds)
+        distributed_l = []
+        sub_l = []
+        count = 0
+        number = round(len(prepped_l) / 8)
+        for row in prepped_l:
+            sub_l.append(row)
+            count += 1
+            # create groupings of records up to the size specified
+            if count >= number:
+                distributed_l.append(sub_l)
+                sub_l = []
+                count = 0
+                continue
+            # catch the last grouping that falls short of that size
+        else:
+            distributed_l.append(sub_l)
+        print(len(distributed_l))
+        inserted = insert_records.map(distributed_l, unmapped(year), unmapped(db_creds))
+        year = year[1][:4]
+        # TODO: It's still calling update_csv_checker before all of of the mapped task is complete
+        update_csv_checker(year, db_creds=db_creds)
 
 
 if __name__ == "__main__":

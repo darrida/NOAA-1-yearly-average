@@ -1,19 +1,15 @@
 from io import StringIO
 from pathlib import Path
-from pprint import pprint
-import time
 from datetime import timedelta
-from typing import List, Tuple
+from typing import List
 from h11 import Data
 from prefect import task, get_run_logger
 from prefect.tasks import task_input_hash
 import pandas as pd
-from psycopg2.errors import UniqueViolation, InFailedSqlTransaction
-from psycopg2.errors import SyntaxError, InFailedSqlTransaction
-from prefect_sqlalchemy.database import sqlalchemy_execute
+from psycopg2.errors import UniqueViolation
 from prefect_sqlalchemy import DatabaseCredentials
 from tqdm import tqdm
-from support import set_station_as_index, initialize_s3_client, df_if_two_one, database
+from support import set_station_as_index, database
 
 
 @task(retries=5, retry_delay_seconds=5,
@@ -28,6 +24,7 @@ def calc_yearly_avg(obj: bytes, filename) -> bytes:
     logger.info(f'BEGIN calculating averages for {filename}')
     # Read data and prep for calculations
     df = pd.read_csv(data)
+    logger.info(f"Number of records: {len(df)}")
     df = set_station_as_index(df)
     # Calculate yearly averages
     avg_df = df.groupby('STATION')[['TEMP', 'DEWP', 'STP', 'MIN', 'MAX', 'PRCP']].mean()
@@ -38,6 +35,7 @@ def calc_yearly_avg(obj: bytes, filename) -> bytes:
     if num_avg != len(df) or num_spatial != len(df):  # Confirm counts match final dataframe
         raise ValueError('Number of grouped averages doesn\'t match number of grouped spatial records')
     # Export dataframe to in-memory file stream
+    logger.info(f"Number of records: {len(df)}")
     textStream = StringIO()
     df.to_csv(textStream)
     df.to_csv("temp_records.csv")
@@ -49,73 +47,29 @@ def calc_yearly_avg(obj: bytes, filename) -> bytes:
     return bytes(textStream.getvalue(), 'utf-8')
 
 
-# @task(retries=5, retry_delay_seconds=5)
-# def database_insert(bucket_name, region_name, files_l: list):
-#     sqlalchemy_credentials = DatabaseCredentials(
-#         driver=AsyncDriver.POSTGRESQL_ASYNCPG,
-#         username="prefect",
-#         password="prefect_password",
-#         database="postgres",
-#     )
-#     sqlalchemy_execute(
-#         "abligatory insert statement",
-#         sqlalchemy_credentials,
-#     )
-
-
 @task(cache_key_fn=task_input_hash, 
       cache_expiration=timedelta(minutes=300))
 def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
     logger = get_run_logger()
-    
-    conn_info = {
-        "user": db_creds.username,
-        "password": db_creds.password.get_secret_value(),
-        "host": db_creds.host,
-        "dbname": db_creds.database,
-        "port": db_creds.port,
-    }
-    
-    data = StringIO(str(data, 'utf-8'))
-    
+
+    data = StringIO(str(data, 'utf-8'))    
     csv_df = pd.read_csv(data)
-    pprint(csv_df)
-    # csv_df["STATION"] = csv_df["STATION"].str.strip("]")
-    # csv_df["STATION"] = csv_df["STATION"].str.strip("[")
-    # csv_df["LATITUDE"] = csv_df["LATITUDE"].str.strip("]")
-    # csv_df["LATITUDE"] = csv_df["LATITUDE"].str.strip("[")
-    # csv_df["LONGITUDE"] = csv_df["LONGITUDE"].str.strip("]")
-    # csv_df["LONGITUDE"] = csv_df["LONGITUDE"].str.strip("[")
-    # csv_df["ELEVATION"] = csv_df["ELEVATION"].str.strip("]")
-    # csv_df["ELEVATION"] = csv_df["ELEVATION"].str.strip("[")
-    
+
     prepped_l = []
-    with database(**conn_info) as conn:
-        for i in tqdm(csv_df.index):
-            vals = [csv_df.at[i, col] for col in list(csv_df.columns)]
-            station = vals[0]
-            # df_if_two_one cleans a few issues left over from the data cleaning and calc steps
-            # station = df_if_two_one(station)
-            latitude = vals[1]
-            # latitude = df_if_two_one(latitude)
-            longitude = vals[2]
-            # longitude = df_if_two_one(longitude)
-            if latitude not in ("nan", "", "missing") and longitude not in ("nan", "", "missing"):
-                try:
-                    # print(f"LATITUDE: {latitude} | LONGITUDE: {longitude}")
-                    cursor = conn.cursor()
-                    # val = cursor.callproc('ST_GeomFromText', ((f'POINT({longitude} {latitude})'), 4326))
-                    cursor.callproc("ST_GeomFromText", ((f"POINT({longitude} {latitude})"), 4326))
-                    geom = cursor.fetchone()[0]
-                    vals.append(geom)
-                except Exception as e:
-                    if "parse error - invalid geometry" in str(e):
-                        # Error in spatial data
-                        logger.info(latitude, longitude)
-                    logger.error(e)
-                    logger.error(vals[0])
-                    raise Exception(e)
-            prepped_l.append(vals)
+    for i in tqdm(csv_df.index):
+        vals = [csv_df.at[i, col] for col in list(csv_df.columns)]
+        # station = vals[0]
+        # # df_if_two_one cleans a few issues left over from the data cleaning and calc steps
+        # # station = df_if_two_one(station)
+        latitude = vals[1]
+        # # latitude = df_if_two_one(latitude)
+        longitude = vals[2]
+        elevation = vals[3]
+        # longitude = df_if_two_one(longitude)
+        if latitude in ("nan", "", "missing") or longitude in ("nan", "", "missing") or elevation in ("nan", "", "missing"):
+            logger.info(f"Missing spatial data from station {vals[0]} | {vals[4]}")
+            continue
+        prepped_l.append(vals)
     
     return prepped_l
 
@@ -132,150 +86,101 @@ def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
         "port": db_creds.port,
     }
 
-    time.sleep(5)
+    # time.sleep(5)
     with database(**conn_info) as conn:
-        commit_count = 0
-        for vals in tqdm(data):
+        year_4_digits = year[1][:4]
+        for vals in tqdm(data, desc=f"Inserting {year}"):
+            # pprint(vals)
+            # return
+            record_d = {
+                "year": year_4_digits,
+                "station": str(vals[0]),
+                "latitude": float(vals[1]),
+                "longitude": float(vals[2]),
+                "elevation": (vals[3]),
+                # "source_file": vals[4],
+                "temp": float(vals[5]),
+                "dewp": float(vals[6]),
+                "stp": float(vals[7]),
+                "max": float(vals[8]),
+                "min": float(vals[9]),
+                "prcp": float(vals[10]),
+                "geom": f"POINT({vals[2]} {vals[1]})"
+            }
+
             try:
+                conn.execute_insert(
+                    """
+                    delete from climate.noaa_year_averages
+                    where year = %s
+                    and station = %s
+                    """, 
+                    (record_d["year"], record_d["station"])
+                )
                 insert_str = """
                     insert into climate.noaa_year_averages 
-                        (year, station, latitude, longitude, elevation, temp, dewp, stp, max, min, prcp, geom)
-                    values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        (year, station, latitude, longitude, elevation, temp, dewp, 
+                        stp, max, min, prcp, geom)
+                    values (%(year)s, %(station)s, %(latitude)s, %(longitude)s, %(elevation)s, %(temp)s, %(dewp)s, 
+                            %(stp)s, %(max)s, %(min)s, %(prcp)s, ST_GeomFromText(%(geom)s, 4326))
                 """
-                conn.execute_insert(
-                    insert_str,
-                    (year, vals[0], vals[1], vals[2], vals[3], vals[4], vals[5], vals[6], vals[7], 
-                        vals[8], vals[9], vals[10]),
-                )
-                commit_count += 1
+                # cursor = conn.cursor()
+                conn.execute_insert(insert_str, record_d)
             except UniqueViolation as e:
                 # Record already exists
-                pass
-            except InFailedSqlTransaction as e:
-                # Record exists, so transaction with "geom" is removed
-                pass
+                logger.info(f"Record for {year}-{record_d['station']} already exists | executing UPDATE")
+                update_str = """
+                    update climate.noaa_year_averages
+                    set (latitude, longitude, elevation, temp, dewp, 
+                         stp, max, min, prcp, geom)
+                      = (%(latitude)s, %(longitude)s, %(elevation)s, %(temp)s, %(dewp)s, 
+                         %(stp)s, %(max)s, %(min)s, %(prcp)s, ST_GeomFromText(%(geom)s, 4326))
+                    where year = %(year)s
+                    and station = %(station)s
+                """
+                conn.execute_insert(update_str, record_d)
             except Exception as e:
                 logger.error(e)
                 logger.error(vals[0], year)
                 raise Exception(e)
-            if commit_count >= 100:
-                conn.commit()
-                commit_count = 0
+        conn.commit()
+    return
+
+
+@task()
+def update_csv_checker(year: str, db_creds: DatabaseCredentials):
+    logger = get_run_logger()
+    logger.info('CALLED')
+    
+    conn_info = {
+        "user": db_creds.username,
+        "password": db_creds.password.get_secret_value(),
+        "host": db_creds.host,
+        "dbname": db_creds.database,
+        "port": db_creds.port,
+    }
+
+    # time.sleep(5)
+    with database(**conn_info) as conn:
         try:
             conn.execute_insert(
-                query="""
+                """
+                delete from climate.csv_checker
+                where year = %s
+                """,
+                params=(year,)
+            )
+            conn.execute_insert(
+                """
                 insert into climate.csv_checker 
                     (year, date_create, date_update)
                 values (%s, CURRENT_DATE, CURRENT_DATE)
                 """,
                 params=(year,)
             )
+            conn.commit()
         except UniqueViolation:
             pass
         except TypeError as e:
-            logger.error(vals[0], year)
+            logger.error(year)
             logger.error(e)
-    return
-
-
-# @task(retries=5, retry_delay_seconds=5)
-# def insert_records(filename: str, db_creds: DatabaseCredentials, bucket_name: str, region_name: str):
-#     logger = get_run_logger()
-    
-#     logger.info(filename)
-#     year = filename.strip("year_average/avg_")
-#     year = year.strip(".csv")
-#     # Retrieve file data from AWS S3
-#     s3_client = initialize_s3_client(region_name)
-#     obj = s3_client.get_object(Bucket=bucket_name, Key=filename)
-#     data = obj["Body"]
-#     csv_df = pd.read_csv(data)
-#     csv_df["SITE_NUMBER"] = csv_df["SITE_NUMBER"].str.strip("]")
-#     csv_df["SITE_NUMBER"] = csv_df["SITE_NUMBER"].str.strip("[")
-#     csv_df["LATITUDE"] = csv_df["LATITUDE"].str.strip("]")
-#     csv_df["LATITUDE"] = csv_df["LATITUDE"].str.strip("[")
-#     csv_df["LONGITUDE"] = csv_df["LONGITUDE"].str.strip("]")
-#     csv_df["LONGITUDE"] = csv_df["LONGITUDE"].str.strip("[")
-#     csv_df["ELEVATION"] = csv_df["ELEVATION"].str.strip("]")
-#     csv_df["ELEVATION"] = csv_df["ELEVATION"].str.strip("[")
-
-#     conn_info = {
-#         "user": db_creds.username,
-#         "password": db_creds.password.get_secret_value(),
-#         "host": db_creds.host,
-#         "dbname": db_creds.database,
-#         "port": db_creds.port,
-#     }
-
-#     time.sleep(10)
-#     with database(**conn_info) as conn:
-#         commit_count = 0
-#         for i in tqdm(csv_df.index):
-#             vals = [csv_df.at[i, col] for col in list(csv_df.columns)]
-#             station = vals[0]
-#             # df_if_two_one cleans a few issues left over from the data cleaning and calc steps
-#             station = df_if_two_one(station)
-#             latitude = vals[1]
-#             latitude = df_if_two_one(latitude)
-#             longitude = vals[2]
-#             longitude = df_if_two_one(longitude)
-#             if latitude not in ("nan", "") and longitude not in ("nan", ""):
-#                 try:
-#                     cursor = conn.cursor()
-#                     # val = cursor.callproc('ST_GeomFromText', ((f'POINT({longitude} {latitude})'), 4326))
-#                     cursor.callproc("ST_GeomFromText", ((f"POINT({longitude} {latitude})"), 4326))
-#                     geom = cursor.fetchone()[0]
-#                     insert_str = """
-#                         insert into climate.noaa_year_averages 
-#                             (year, station, latitude, longitude, elevation, temp, dewp, stp, max, min, prcp, geom)
-#                         values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-#                     """
-#                     conn.execute_insert(
-#                         insert_str,
-#                         (
-#                             year,
-#                             vals[0],
-#                             vals[1],
-#                             vals[2],
-#                             vals[3],
-#                             vals[4],
-#                             vals[5],
-#                             vals[6],
-#                             vals[7],
-#                             vals[8],
-#                             vals[9],
-#                             geom,
-#                         ),
-#                     )
-#                     commit_count += 1
-#                 except UniqueViolation as e:
-#                     # Record already exists
-#                     pass
-#                 except InFailedSqlTransaction as e:
-#                     # Record exists, so transaction with "geom" is removed
-#                     pass
-#                 except Exception as e:
-#                     if "parse error - invalid geometry" in str(e):
-#                         # Error in spatial data
-#                         logger.info(latitude, longitude)
-#                     print(e)
-#                     logger.info(vals[0], year)
-#                     raise Exception(e)
-#                 if commit_count >= 100:
-#                     conn.commit()
-#                     commit_count = 0
-#         try:
-#             conn.execute_insert(
-#                 query="""
-#                 insert into climate.csv_checker 
-#                     (year, date_create, date_update)
-#                 values (%s, CURRENT_DATE, CURRENT_DATE)
-#                 """,
-#                 params=(year,)
-#             )
-#         except UniqueViolation:
-#             pass
-#         except TypeError as e:
-#             logger.error(vals[0], year)
-#             logger.error(e)
-#         return
