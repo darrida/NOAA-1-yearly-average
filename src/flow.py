@@ -63,8 +63,6 @@ def main():
     csv_l = [x for x in files_l if x.endswith('_full.csv') and x.split("/")[1][:4] in update_l]
     print(csv_l)
 
-    # TODO: Decide if there is a need to replace the current/old records
-    #       (if they exist to be replaced)
     for filename in csv_l:
         # if '1980' not in filename:
         #     continue

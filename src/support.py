@@ -1,7 +1,3 @@
-# import sys
-# import pandas as pd
-# import psycopg2
-
 import sys
 sys.settrace
 import traceback

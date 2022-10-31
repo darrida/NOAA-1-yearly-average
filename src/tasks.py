@@ -2,7 +2,6 @@ from io import StringIO
 from pathlib import Path
 from datetime import timedelta
 from typing import List
-from h11 import Data
 from prefect import task, get_run_logger
 from prefect.tasks import task_input_hash
 import pandas as pd
