@@ -1,3 +1,4 @@
+import datetime
 from io import StringIO
 from pathlib import Path
 from datetime import timedelta
@@ -168,7 +169,7 @@ def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
 
 
 @task()
-def update_csv_checker(year: str, db_creds: DatabaseCredentials):
+def update_csv_checker(year: str, s3_date, db_creds: DatabaseCredentials):
     logger = get_run_logger()
     logger.info('CALLED')
     
@@ -180,6 +181,7 @@ def update_csv_checker(year: str, db_creds: DatabaseCredentials):
         "port": db_creds.port,
     }
 
+    # insert_date = datetime.datetime.strptime(s3_date, '%Y%m%d')
     # time.sleep(5)
     with database(**conn_info) as conn:
         try:
@@ -194,9 +196,9 @@ def update_csv_checker(year: str, db_creds: DatabaseCredentials):
                 """
                 insert into climate.csv_checker 
                     (year, date_create, date_update)
-                values (%s, CURRENT_DATE, CURRENT_DATE)
+                values (%s, %s, %s)
                 """,
-                params=(year,)
+                params=(year, s3_date, s3_date)
             )
             conn.commit()
         except UniqueViolation:
