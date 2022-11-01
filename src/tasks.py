@@ -1,4 +1,3 @@
-import datetime
 from io import StringIO
 from pathlib import Path
 from datetime import timedelta
@@ -58,14 +57,7 @@ def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
     prepped_l = []
     for i in tqdm(csv_df.index):
         vals = [csv_df.at[i, col] for col in list(csv_df.columns)]
-        # station = vals[0]
-        # # df_if_two_one cleans a few issues left over from the data cleaning and calc steps
-        # # station = df_if_two_one(station)
-        latitude = vals[1]
-        # # latitude = df_if_two_one(latitude)
-        longitude = vals[2]
-        elevation = vals[3]
-        # longitude = df_if_two_one(longitude)
+        latitude, longitude, elevation = vals[1], vals[2], vals[3]
         if latitude in ("nan", "", "missing") or longitude in ("nan", "", "missing") or elevation in ("nan", "", "missing"):
             logger.info(f"Missing spatial data from station {vals[0]} | {vals[4]}")
             continue
@@ -111,8 +103,6 @@ def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
     with database(**conn_info) as conn:
         year_4_digits = year[1][:4]
         for vals in tqdm(data, desc=f"Inserting {year}"):
-            # pprint(vals)
-            # return
             record_d = {
                 "year": year_4_digits,
                 "station": str(vals[0]),
@@ -145,7 +135,6 @@ def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
                     values (%(year)s, %(station)s, %(latitude)s, %(longitude)s, %(elevation)s, %(temp)s, %(dewp)s, 
                             %(stp)s, %(max)s, %(min)s, %(prcp)s, ST_GeomFromText(%(geom)s, 4326))
                 """
-                # cursor = conn.cursor()
                 conn.execute_insert(insert_str, record_d)
             except UniqueViolation as e:
                 # Record already exists
@@ -181,17 +170,8 @@ def update_csv_checker(year: str, s3_date, db_creds: DatabaseCredentials):
         "port": db_creds.port,
     }
 
-    # insert_date = datetime.datetime.strptime(s3_date, '%Y%m%d')
-    # time.sleep(5)
     with database(**conn_info) as conn:
         try:
-            # conn.execute_insert(
-            #     """
-            #     delete from climate.csv_checker
-            #     where year = %s
-            #     """,
-            #     params=(year,)
-            # )
             conn.execute_insert(
                 """
                 insert into climate.csv_checker 

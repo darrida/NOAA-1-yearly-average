@@ -48,32 +48,20 @@ def main():
     for i in last_updated_s3_l:
         year = i[0]
         s3_date = i[1]
-        # print(s3_date)
         try:
             db_date = last_updated_db_d[year]
         except KeyError:
             # If year not found in db, add year to update/insert list
             update_l.append([year, s3_date])
             continue
-        # print(year, s3_date, db_date)
         if s3_date > db_date:
             # If s3 date is more than db date, add year to update/insert list
             update_l.append([year, s3_date])
-    print(update_l)
-    
     
     csv_l = [[f"data/{x[0]}_full.csv", x[1]] for x in update_l]
     pprint(csv_l)
-    
-    # get list of files with data to insert
-    # csv_l = [x for x in files_l if x.endswith('_full.csv') and x.split("/")[1][:4] in [x[0] for x in update_l]]
-    # print(csv_l)
-    
-    # csv_l = ["data/2021_full.csv"]
 
     for year_l in csv_l:
-        # if '1980' not in filename:
-        #     continue
         filename = year_l[0]
         s3_date = year_l[1]
         print(filename)
@@ -82,7 +70,6 @@ def main():
         key = s3_upload(bucket=bucket, key=f"year_average/{filename.split('/')[1][:4]}_averages.csv", # example "filename": "data/YYYY_full.csv"
                         data=avg_obj, aws_credentials=aws_creds)
         logger.info(f"Stored as '{key}'")
-        # continue
         logger.info(f"Start Database Insert Process for {key}")
         prepped_l = prep_records(avg_obj, db_creds)
         year = filename.split("/")[:4]
@@ -107,8 +94,6 @@ def main():
         delete_csv_checker(year, db_creds)
         inserted = insert_records.map(distributed_l, unmapped(year), unmapped(db_creds))
         logger.info('Insertion done; haven\'t run csv checker')
-        # return
-        # TODO: It's still calling update_csv_checker before all of of the mapped task is complete
         update_csv_checker(year, s3_date, db_creds=db_creds)
 
 
