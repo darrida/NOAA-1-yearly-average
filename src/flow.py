@@ -6,7 +6,7 @@ from prefect_aws import AwsCredentials
 from prefect_aws.s3 import s3_list_objects, s3_download, s3_upload
 from prefect_sqlalchemy import DatabaseCredentials
 from prefect_sqlalchemy.database import sqlalchemy_query
-from tasks import calc_yearly_avg, insert_records, prep_records, update_csv_checker
+from tasks import calc_yearly_avg, delete_csv_checker, insert_records, prep_records, update_csv_checker
 
 
 @flow(name="NOAA-1-yearly-average", task_runner=SequentialTaskRunner())
@@ -62,6 +62,8 @@ def main():
     # get list of files with data to insert
     csv_l = [x for x in files_l if x.endswith('_full.csv') and x.split("/")[1][:4] in update_l]
     print(csv_l)
+    
+    # csv_l = ["data/2021_full.csv"]
 
     for filename in csv_l:
         # if '1980' not in filename:
@@ -93,8 +95,11 @@ def main():
         else:
             distributed_l.append(sub_l)
         print(len(distributed_l))
-        inserted = insert_records.map(distributed_l, unmapped(year), unmapped(db_creds))
         year = year[1][:4]
+        delete_csv_checker(year, db_creds)
+        inserted = insert_records.map(distributed_l, unmapped(year), unmapped(db_creds))
+        logger.info('Insertion done; haven\'t run csv checker')
+        # return
         # TODO: It's still calling update_csv_checker before all of of the mapped task is complete
         update_csv_checker(year, db_creds=db_creds)
 

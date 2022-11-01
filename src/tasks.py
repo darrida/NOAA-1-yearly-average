@@ -8,7 +8,7 @@ import pandas as pd
 from psycopg2.errors import UniqueViolation
 from prefect_sqlalchemy import DatabaseCredentials
 from tqdm import tqdm
-from support import set_station_as_index, database
+from support import not_missing_check, set_station_as_index, database
 
 
 @task(retries=5, retry_delay_seconds=5,
@@ -74,6 +74,27 @@ def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
 
 
 @task()
+def delete_csv_checker(year, db_creds):
+    
+    conn_info = {
+        "user": db_creds.username,
+        "password": db_creds.password.get_secret_value(),
+        "host": db_creds.host,
+        "dbname": db_creds.database,
+        "port": db_creds.port,
+    }
+    
+    with database(**conn_info) as conn:
+        conn.execute_insert(
+            """
+            delete from climate.csv_checker
+            where year = %s
+            """,
+            params=(year,)
+        )
+
+
+@task()
 def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
     logger = get_run_logger()
     
@@ -94,9 +115,9 @@ def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
             record_d = {
                 "year": year_4_digits,
                 "station": str(vals[0]),
-                "latitude": float(vals[1]),
-                "longitude": float(vals[2]),
-                "elevation": (vals[3]),
+                "latitude": not_missing_check(vals[1]),
+                "longitude": not_missing_check(vals[2]),
+                "elevation": not_missing_check(vals[3]),
                 # "source_file": vals[4],
                 "temp": float(vals[5]),
                 "dewp": float(vals[6]),
@@ -162,13 +183,13 @@ def update_csv_checker(year: str, db_creds: DatabaseCredentials):
     # time.sleep(5)
     with database(**conn_info) as conn:
         try:
-            conn.execute_insert(
-                """
-                delete from climate.csv_checker
-                where year = %s
-                """,
-                params=(year,)
-            )
+            # conn.execute_insert(
+            #     """
+            #     delete from climate.csv_checker
+            #     where year = %s
+            #     """,
+            #     params=(year,)
+            # )
             conn.execute_insert(
                 """
                 insert into climate.csv_checker 

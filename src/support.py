@@ -1,10 +1,15 @@
 import sys
+from typing import Optional
 sys.settrace
 import traceback
 import pandas as pd
 import boto3
 import psycopg2
 from psycopg2.errors import SyntaxError, InFailedSqlTransaction
+
+
+def not_missing_check(value) ->  Optional[float]:
+    return float(value) if value not in ["missing", "", "nan"] else None
 
 
 def set_station_as_index(df: pd.DataFrame) -> pd.DataFrame:
