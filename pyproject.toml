@@ -16,7 +16,6 @@ prefect-sqlalchemy = "^0.2.0"
 prefect-aws = "^0.1.6"
 tqdm = "^4.64.1"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

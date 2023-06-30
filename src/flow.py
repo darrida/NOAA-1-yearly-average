@@ -1,15 +1,21 @@
-from pprint import pprint
 from datetime import datetime
+from pprint import pprint
+
 from prefect import flow, get_run_logger, unmapped
-from prefect.task_runners import SequentialTaskRunner
 from prefect_aws import AwsCredentials
-from prefect_aws.s3 import s3_list_objects, s3_download, s3_upload
+from prefect_aws.s3 import s3_download, s3_list_objects, s3_upload
 from prefect_sqlalchemy import DatabaseCredentials
 from prefect_sqlalchemy.database import sqlalchemy_query
-from tasks import calc_yearly_avg, delete_csv_checker, insert_records, prep_records, update_csv_checker
+from tasks import (
+    calc_yearly_avg,
+    delete_csv_checker,
+    insert_records,
+    prep_records,
+    update_csv_checker,
+)
 
 
-@flow(name="NOAA-1-yearly-average", task_runner=SequentialTaskRunner())
+@flow(name="NOAA-1-yearly-average") #, task_runner=SequentialTaskRunner())
 def main():
     logger = get_run_logger()
     
@@ -19,7 +25,7 @@ def main():
 
     # FIND DIFFERENCE BETWEEN S3 AND DB (if S3 date > db date, update year records)
     s3_objects = s3_list_objects(bucket=bucket, prefix="data", aws_credentials=aws_creds)
-    files_l = [x["Key"] for x in s3_objects]
+    # files_l = [x["Key"] for x in s3_objects]
 
     # pull completed files (includes NOAA csv date)
     # - transform to match queried db format
@@ -61,6 +67,7 @@ def main():
     csv_l = [[f"data/{x[0]}_full.csv", x[1]] for x in update_l]
     pprint(csv_l)
 
+    logger.info(f"Start Yearly Average Calculation for years: {csv_l}")
     for year_l in csv_l:
         filename = year_l[0]
         s3_date = year_l[1]
@@ -73,6 +80,11 @@ def main():
         logger.info(f"Start Database Insert Process for {key}")
         prepped_l = prep_records(avg_obj, db_creds)
         year = filename.split("/")[:4]
+
+        # insert_many(prepped_l, year)
+        # logger.info('Insertion done; haven\'t run csv checker')
+        # continue
+
         distributed_l = []
         sub_l = []
         count = 0
@@ -92,9 +104,11 @@ def main():
         print(len(distributed_l))
         year = year[1][:4]
         delete_csv_checker(year, db_creds)
-        inserted = insert_records.map(distributed_l, unmapped(year), unmapped(db_creds))
+        insert_records.map(distributed_l, unmapped(year), unmapped(db_creds))
+        # insert_subflow(distributed_l, year, db_creds)
         logger.info('Insertion done; haven\'t run csv checker')
         update_csv_checker(year, s3_date, db_creds=db_creds)
+    return
 
 
 if __name__ == "__main__":

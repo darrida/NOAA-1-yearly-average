@@ -1,14 +1,15 @@
+from datetime import timedelta
 from io import StringIO
 from pathlib import Path
-from datetime import timedelta
 from typing import List
-from prefect import task, get_run_logger
-from prefect.tasks import task_input_hash
+
 import pandas as pd
-from psycopg2.errors import UniqueViolation
+from prefect import get_run_logger, task
+from prefect.tasks import task_input_hash
 from prefect_sqlalchemy import DatabaseCredentials
+from psycopg2.errors import UniqueViolation
+from support import database, not_missing_check, set_station_as_index
 from tqdm import tqdm
-from support import not_missing_check, set_station_as_index, database
 
 
 @task(retries=5, retry_delay_seconds=5,
@@ -58,7 +59,11 @@ def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
     for i in tqdm(csv_df.index):
         vals = [csv_df.at[i, col] for col in list(csv_df.columns)]
         latitude, longitude, elevation = vals[1], vals[2], vals[3]
-        if latitude in ("nan", "", "missing") or longitude in ("nan", "", "missing") or elevation in ("nan", "", "missing"):
+        if (
+            latitude in ("nan", "", "missing") 
+            or longitude in ("nan", "", "missing") 
+            or elevation in ("nan", "", "missing")
+        ):
             logger.info(f"Missing spatial data from station {vals[0]} | {vals[4]}")
             continue
         prepped_l.append(vals)
@@ -67,7 +72,7 @@ def prep_records(data, db_creds: DatabaseCredentials) -> List[list]:
 
 
 @task()
-def delete_csv_checker(year, db_creds):
+def delete_csv_checker(year, db_creds: DatabaseCredentials):
     
     conn_info = {
         "user": db_creds.username,
@@ -101,7 +106,8 @@ def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
 
     # time.sleep(5)
     with database(**conn_info) as conn:
-        year_4_digits = year[1][:4]
+        year_4_digits = year #[1][:4]
+        print(year_4_digits)
         for vals in tqdm(data, desc=f"Inserting {year}"):
             record_d = {
                 "year": year_4_digits,
@@ -149,10 +155,6 @@ def insert_records(data: List[list], year: str, db_creds: DatabaseCredentials):
                     and station = %(station)s
                 """
                 conn.execute_insert(update_str, record_d)
-            except Exception as e:
-                logger.error(e)
-                logger.error(vals[0], year)
-                raise Exception(e)
         conn.commit()
     return
 
